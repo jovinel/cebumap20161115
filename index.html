@@ -1,249 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
+<html><head>
     <title>Restaurants in cebu</title>
     <meta name="google-signin-client_id" content="640067078921-9b40rl3fgi8kcnharj3a6i85a0tg9kci.apps.googleusercontent.com">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
-    <script src="bootstrap-3.3.7-dist\js\bootstrap.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.7-dist\css\bootstrap.css">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      #output {
-        display: none;
-      }
-
-      table {
-        font-size: 12px;
-      }
-
-      #map {
-        width: 100%;
-      }
-
-      #listing {
-
-        overflow: auto;
-        width:200px;
-        cursor: pointer;
-        overflow-x: hidden;
-      }
-
-      #resto_type {
-        position: fixed;
-        width: 200px;
-        height: 75px;
-        overflow: auto;
-        left: 0px;
-        top: 25px;
-        cursor: pointer;
-        overflow-x: hidden;
-        margin-top: 10px;
-      }
-
-      #resto_type input
-      {
-        float:right;
-      }
-
-      #resto_type label
-      {
-        display: inline-block;
-      }
-
-      #findhotels {
-        position: absolute;
-        text-align: right;
-        width: 100px;
-        font-size: 14px;
-        padding: 4px;
-        z-index: 5;
-        background-color: #fff;
-      }
-      #locationField {
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 25px;
-        left: 0px;
-        top: 0px;
-        z-index: 5;
-        background-color: #fff;
-      }
-      #controls {
-        position: absolute;
-        left: 300px;
-        width: 140px;
-        top: 0px;
-        z-index: 5;
-        background-color: #fff;
-      }
-      #autocomplete {
-        width: 100%;
-      }
-      #country {
-        width: 100%;
-      }
-      .placeIcon {
-        width: 20px;
-        height: 34px;
-        margin: 4px;
-      }
-      .hotelIcon {
-        width: 24px;
-        height: 24px;
-      }
-      #resultsTable {
-        border-collapse: collapse;
-        width: 240px;
-      }
-      #rating {
-        font-size: 13px;
-        font-family: Arial Unicode MS;
-      }
-      .iw_table_row {
-        height: 18px;
-      }
-      .iw_attribute_name {
-        font-weight: bold;
-        text-align: right;
-      }
-      .iw_table_icon {
-        text-align: right;
-      }
-      #resto_count, #resto_total {
-        color: #b22222;
-      }
-
-      /* Left Panel */
-      #leftPanel {
-
-        background: #fff;
-        position: absolute;
-        left: 10px;
-        top:2%;
-        z-index: 5;
-        overflow: auto;
-        overflow-x: hidden;
-        display:none;
-      }
-
-
-      /* Right Panel */
-      #rightPanel {
-        height: 96%;
-        width: 200px;
-        background: #fff;
-        position: absolute;
-        right: 10px;
-        top:2%;
-        z-index: 5;
-        overflow: auto;
-        overflow-x: hidden
-      }
-
-      #rightPanel button {
-        width:200px;
-        text-align: left;
-        margin-bottom: 2px;
-      }
-
-      #results td a {
-        margin-right: 10px;
-      }
-
-      #listing input[type="checkbox"] {
-        margin-left:5px;
-        margin-right:5px;
-      }
-
-    </style>
-  </head>
-
-  <body>
-
-    <div id="rightPanel">
-      <div class="btn-group-vertical" role="group" aria-label="...">
-        <button type="button" id="btn_resto" class="btn btn-info" data-toggle="collapse" data-target="#listing_collapse">Restaurants <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span></button>
-        <div id="listing_collapse" class="collapse">
-          <div id="listing">
-            
-            <input type="checkbox" class="resto_class" value="0"/><label>Fine Dining</label><br/>
-            <input type="checkbox" class="resto_class" value="1"/><label>Casial Dining</label><br/>
-            <input type="checkbox" class="resto_class" value="2"/><label>Fast Food</label><br/><br/>
-            <label>Found Restaurants</label>
-            <table id="resultsTable">
-              <tbody id="results"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <button type="button" id="btnCircle" class="btn btn-info" data-toggle="collapse" data-target="#demo">Draw circle</button>
-        <div id="demo" class="collapse">
-          <label class="circle_info">Restaurant Count: <span id="resto_count"></span></label>
-          <label class="circle_info">Total Earnings: <span id="resto_total"></span></label>
-          <a href="#" onclick="showAnalytics(this);">Show analytics</a>
-        </div>
-
-      </div>
-      
-
-    </div>
-
-    <div id="leftPanel">
-      <div id="piechart" style="width: 900px; height: 500px;"></div>
-    </div>
-
-    <div id="authorize-div" style="display: none">
-      <span>Authorize access to Google Sheets API</span>
-      <!--Button for the user to click to initiate auth sequence -->
-      <button id="authorize-button" onclick="handleAuthClick(event)">
-        Authorize
-      </button>
-    </div>
-    <pre id="output"></pre>
-
-    
-
-    <div id="map"></div>
-    
-
-    <div style="display: none">
-      <div id="info-content">
-        <table>
-          <tr id="iw-url-row" class="iw_table_row">
-            <td id="iw-icon" class="iw_table_icon"></td>
-            <td id="iw-url"></td>
-          </tr>
-          <tr id="iw-address-row" class="iw_table_row">
-            <td class="iw_attribute_name">Patrons/day:</td>
-            <td id="iw-address"></td>
-          </tr>
-          <tr id="iw-phone-row" class="iw_table_row">
-            <td class="iw_attribute_name">Earnings/day:</td>
-            <td id="iw-phone"></td>
-          </tr>
-          <tr id="iw-rating-row" class="iw_table_row">
-            <td class="iw_attribute_name">Jobs of patrons:</td>
-            <td id="iw-rating"></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
+    <script type="text/javascript" src="assets/js/intro.js-2.3.0/intro.js"></script>
     <script>
       // This example uses the autocomplete feature of the Google Places API.
       // It allows the user to find all hotels in a given place, within a given
@@ -260,7 +24,7 @@
       var countryRestrict = {'country': 'us'};
       var hostnameRegexp = new RegExp('^https?://.+?/');
       var cebu;
-      var showDirection = false;
+      var showDirection = true;
       var currentPosition;
       var directionsService;
       var directionsDisplay;
@@ -268,7 +32,9 @@
       var statistics = [];
       var displayedRestaurantsOnMap = [];
 
-      const RESTO_CLASSIFICATION = {0:"Fine Dining", 1:"Casual Dining", 2:"Fast Food"};
+      const RESTO_CLASSIFICATION = {0:"Fast Food", 1:"Barbeque", 2:"Buffet"};
+      const RESTO_CLASSIFICATION_ICON = {0:"fastfood.png", 1:"barbecue.png", 2:"restaurant_buffet.png"};
+
 
 
       var CLIENT_ID = '640067078921-9b40rl3fgi8kcnharj3a6i85a0tg9kci.apps.googleusercontent.com';
@@ -282,10 +48,11 @@
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 13,
           center: cebu,
-          mapTypeControl: false,
-          panControl: false,
-          zoomControl: false,
-          streetViewControl: false
+          mapTypeControl: true,
+          mapTypeId: 'satellite',
+          panControl: true,
+          zoomControl: true,
+          streetViewControl: true
         });
 
         infoWindow = new google.maps.InfoWindow({
@@ -308,7 +75,7 @@
               map: map,
               editable: true,
               center: cebu,
-              radius: Math.sqrt(599) * 100
+              radius: Math.sqrt(599) * 50
             });
 
         circle.setVisible(false);
@@ -321,7 +88,7 @@
           showRestaurantInfo(this);
         });
 
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', {'packages':['bar']});
 
       }
 
@@ -330,6 +97,7 @@
       function search() {
 
         var fetchedPlaceIds = [];
+        var fetchedPlaceClass = [];
         var searchData = {
           location: cebu,
           radius:500,
@@ -346,8 +114,8 @@
             // assign a letter of the alphabetic to each marker icon.
             for (var i = 0; i < results.length; i++) {
 
-              var markerNumber = last.toString();
-              var markerIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + markerNumber + "|FF0000|000000";
+              var classIndex = getRandomInt(0,2);
+              var markerIcon = "icons/" + RESTO_CLASSIFICATION_ICON[classIndex];
               // Use marker animation to drop the icons incrementally on the map.
               markers[last] = new google.maps.Marker({
                 position: results[i].geometry.location,
@@ -358,11 +126,12 @@
               var place_id = results[i].place_id;
 
               fetchedPlaceIds.push(place_id);
+              fetchedPlaceClass.push(classIndex);
               // If the user clicks a hotel marker, show the details of that hotel
               // in an info window.
               markers[last].placeResult = results[i];
               google.maps.event.addListener(markers[last], 'click', showInfoWindow);
-              setTimeout(dropMarker(last), i);
+              setTimeout(dropMarker(last), i * 50);
 
               var obj = {
                 "place_id": results[i].place_id,
@@ -371,7 +140,7 @@
 
               displayedRestaurantsOnMap.push(obj);
 
-              addResult(results[i], last);
+              addResult(results[i], last, classIndex);
               last++;
             }
 
@@ -383,6 +152,7 @@
             updateSpreadsheet(fetchedPlaceIds);
 
           }
+
         });
 
       }
@@ -402,12 +172,13 @@
         };
       }
 
-      function addResult(result, i) {
+      function addResult(result, i, classification) {
 
         var results = document.getElementById('results');
 
         var markerNumber = i.toString();
-        var markerIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + markerNumber + "|FF0000|000000";
+        // var markerIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + markerNumber + "|FF0000|000000";
+        var markerIcon = "icons/" + RESTO_CLASSIFICATION_ICON[classification];
 
         // var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
         // var markerIcon = MARKER_PATH + markerLetter + '.png';
@@ -417,7 +188,6 @@
 
 
         var iconTd = document.createElement('td');
-        iconTd.setAttribute('rowspan', '2');
         var nameTd = document.createElement('td');
         var icon = document.createElement('img');
         icon.src = markerIcon;
@@ -431,29 +201,11 @@
         tr.appendChild(iconTd);
         tr.appendChild(nameTd);
 
-        var linksTd = document.createElement('td');
-        var linkDirection = document.createElement('a');
-        linkDirection.innerHTML = 'Direction';
-        linkDirection.onclick = function() {
-          showDirection = true;
+        tr.onclick = function() {
           google.maps.event.trigger(markers[i], 'click');
         };
-        var linkInfo = document.createElement('a');
-        linkInfo.innerHTML = 'Info';
-        linkInfo.onclick = function() {
-          showDirection = false;
-          google.maps.event.trigger(markers[i], 'click');
-        };
-        linksTd.appendChild(linkDirection);
-        linksTd.appendChild(linkInfo);
-
-        var tr2 = document.createElement('tr');
-        tr2.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
-        tr2.appendChild(linksTd);
-
 
         results.appendChild(tr);
-        results.appendChild(tr2);
       }
 
       function clearResults() {
@@ -516,11 +268,27 @@
 
         document.getElementById('iw-icon').innerHTML = '<img class="hotelIcon" ' + 'src="' + place.icon + '"/>';
         document.getElementById('iw-url').innerHTML = '<b><a href="' + place.url + '">' + place.name + '</a></b>';
-        document.getElementById('iw-address').textContent = statistics[index].avg_patrons;
+        document.getElementById('iw-address').textContent = parseInt(statistics[index].avg_customers_a_day);
         document.getElementById('iw-phone-row').style.display = '';
-        document.getElementById('iw-phone').textContent = statistics[index].avg_earnings;
+        document.getElementById('iw-phone').textContent = "Php " + statistics[index].avg_earnings_a_day.toFixed(2);
+        $("#iw-phone").digits();
         document.getElementById('iw-rating-row').style.display = '';
         document.getElementById('iw-rating').innerHTML = statistics[index].jobs;
+
+        drawChart(statistics[index].mon_customer_count,
+                  statistics[index].tue_customer_count,
+                  statistics[index].wed_customer_count,
+                  statistics[index].thu_customer_count,
+                  statistics[index].fri_customer_count,
+                  statistics[index].sat_customer_count,
+                  statistics[index].sun_customer_count,
+                  statistics[index].mon_total_earnings,
+                  statistics[index].tue_total_earnings,
+                  statistics[index].wed_total_earnings,
+                  statistics[index].thu_total_earnings,
+                  statistics[index].fri_total_earnings,
+                  statistics[index].sat_total_earnings,
+                  statistics[index].sun_total_earnings);
 
       }
 
@@ -549,35 +317,39 @@
           var isWithinCircle = myCircle.getBounds().contains(displayedRestaurantsOnMap[i].data[0].geometry.location);
           if (isWithinCircle)
           {
-            totalEarnings += parseInt(statistics[i].avg_earnings);
+            totalEarnings += parseInt(statistics[i].avg_earnings_a_day);
             restoCount++;
           }
         }
-
         document.getElementById('resto_count').innerHTML = restoCount;
         document.getElementById('resto_total').innerHTML = totalEarnings;
         $("#resto_total").digits();
-
-        drawChart();
         
       }
 
-      function drawChart() {
 
+      function drawChart(c_mon, c_tue, c_wed, c_thu, c_fri, c_sat, c_sun, e_mon, e_tue, e_wed, e_thu, e_fri, e_sat, e_sun) {
         var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
+          ['Day', 'Customer', 'Earnings'],
+          ['Mon', parseInt(c_mon), parseInt(e_mon)],
+          ['Tue', parseInt(c_tue), parseInt(e_tue)],
+          ['Wed', parseInt(c_wed), parseInt(e_wed)],
+          ['Thu', parseInt(c_thu), parseInt(e_thu)],
+          ['Fri', parseInt(c_fri), parseInt(e_fri)],
+          ['Sat', parseInt(c_sat), parseInt(e_sat)],
+          ['Sun', parseInt(c_sun), parseInt(e_sun)],
         ]);
 
         var options = {
-          title: 'My Daily Activities'
+          chart: {
+            title: 'Restaurant analytics',
+            subtitle: 'Customer count vs. Earnings vs. Day of the week',
+            width: 900,
+            height: 600
+          }
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 
         chart.draw(data, options);
       }
@@ -646,6 +418,7 @@
       function listMajors() {
 
         search();
+
   
       }
 
@@ -662,7 +435,23 @@
   
           if (index == -1)
           {
-            values.push([fetchPlaceIds[i], getRandomClassification(), getRandomInt(1000, 5000), getRandomInt(10000, 50000), getRandomJob()]);
+            values.push([fetchPlaceIds[i], 
+                        getRandomClassification(), 
+                        getRandomInt(100, 300), 
+                        getRandomInt(100, 300),
+                        getRandomInt(100, 300),
+                        getRandomInt(100, 300),
+                        getRandomInt(100, 300),
+                        getRandomInt(100, 300),
+                        getRandomInt(100, 300),
+                        getRandomInt(400, 1000),
+                        getRandomInt(400, 1000),
+                        getRandomInt(400, 1000),
+                        getRandomInt(400, 1000),
+                        getRandomInt(400, 1000),
+                        getRandomInt(400, 1000),
+                        getRandomInt(400, 1000),
+                        getRandomJob()]);
 
           }
           
@@ -670,8 +459,8 @@
 
         gapi.client.sheets.spreadsheets.values.append({
           spreadsheetId: '1paOEHxh3Z3txHoee6A084ng6kbmfJ1vzA9KfoIanGSc',
-          range: 'A2:E2',
-          valueInputOption:'RAW',
+          range: 'A2:Q2',
+          valueInputOption:'USER_ENTERED',
           resource: {
              "values": values,
              "majorDimension": "ROWS"
@@ -690,7 +479,7 @@
         var place_ids = [];
         gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1paOEHxh3Z3txHoee6A084ng6kbmfJ1vzA9KfoIanGSc',
-          range: 'A2:E100',
+          range: 'A2:Q200',
         }).then(function(response) {
           var range = response.result;
           if (range.values != null) {
@@ -719,7 +508,7 @@
         statistics = [];
         gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1paOEHxh3Z3txHoee6A084ng6kbmfJ1vzA9KfoIanGSc',
-          range: 'A2:E100',
+          range: 'A2:Q200',
         }).then(function(response) {
           var range = response.result;
           if (range.values != null)
@@ -732,14 +521,30 @@
                 var obj = {
                     "place_id":row[0], 
                     "classification":row[1],
-                    "avg_patrons":row[2], 
-                    "avg_earnings":row[3], 
-                    "jobs":row[4]
+                    "mon_customer_count":row[2], 
+                    "tue_customer_count":row[3], 
+                    "wed_customer_count":row[4], 
+                    "thu_customer_count":row[5], 
+                    "fri_customer_count":row[6], 
+                    "sat_customer_count":row[7], 
+                    "sun_customer_count":row[8], 
+                    "mon_total_earnings":row[9], 
+                    "tue_total_earnings":row[10], 
+                    "wed_total_earnings":row[11], 
+                    "thu_total_earnings":row[12], 
+                    "fri_total_earnings":row[13], 
+                    "sat_total_earnings":row[14], 
+                    "sun_total_earnings":row[15], 
+                    "avg_customers_a_day":(parseInt(row[2]) + parseInt(row[3]) + parseInt(row[4]) + parseInt(row[5]) + parseInt(row[6]) + parseInt(row[7]) + parseInt(row[8])) / 7, 
+                    "avg_earnings_a_day":(parseInt(row[9]) + parseInt(row[10]) + parseInt(row[11]) + parseInt(row[12]) + parseInt(row[13]) + parseInt(row[14]) + parseInt(row[15])) / 7,
+                    "jobs":row[16]
+
                 };
 
                 statistics.push(obj);
         
               }
+
 
             } else {
               console.log("Data not found");
@@ -809,43 +614,87 @@
 
       function displayRestoByClassification(id)
       {
-        var resultCount = 0;
 
-        if (id == 99)
+        for (var i = 0; i < statistics.length; i++)
         {
-          for (var i = 0; i < displayedRestaurantsOnMap.length; i++)
+    
+          if(statistics[i].classification == id)
           {
-            addResult(displayedRestaurantsOnMap[i].data[0], displayedRestaurantsOnMap[i].data[1]);
-          } 
-        }
-        else
-        {
-          for (var i = 0; i < statistics.length; i++)
-          {
-      
-            if(statistics[i].classification == id)
+            var index = displayedRestaurantsOnMap.findIndex(x => x.place_id==statistics[i].place_id);
+            if (index > -1)
             {
-              var index = displayedRestaurantsOnMap.findIndex(x => x.place_id==statistics[i].place_id);
-              if (index > -1)
-              {
-                 resultCount++;
-                 addResult(displayedRestaurantsOnMap[index].data[0], displayedRestaurantsOnMap[index].data[1]);
-              }
+               addResult(displayedRestaurantsOnMap[index].data[0], displayedRestaurantsOnMap[index].data[1], id);
             }
-            
           }
           
         }
-        
-      }
 
-      function showAnalytics(this)
-      {
-        $("#leftPanel").show(100);
-        $(this).innerHTML = "Hide analytics";
       }
 
       $(document).ready(function() {
+
+        $(".col-md-1 .btn").on('click', function() {
+          var index = $(".col-md-1 .btn").index(this);
+          $(".eventInfo").hide();
+          $(".eventInfo:eq("+index+")").show();
+          $(".col-md-1 .btn").removeClass('active');
+          $(".col-md-1 .btn:eq("+index+")").addClass('active');
+          switch(index)
+          {
+            case 0: 
+              showDirection = true; 
+              $("#classificationCheckboxes").hide();
+              $("#resultsTable").show();
+              $("#circleTable").hide();
+              break;
+            case 1: 
+              showDirection = false; 
+              $("#classificationCheckboxes").hide();
+              $("#resultsTable").show();
+              $("#circleTable").hide();
+              break;
+            case 2: 
+            $("#classificationCheckboxes").show();
+              $("#resultsTable").hide();
+              $("#circleTable").hide();
+              break;
+            case 3: 
+              $("#classificationCheckboxes").hide();
+              $("#resultsTable").hide();
+              $("#circleTable").show();
+              if (circle.getVisible()) {
+                circle.setVisible(false);
+                document.getElementById('resto_count').innerHTML = 0;
+                document.getElementById('resto_total').innerHTML = 0;
+                $("#resto_total").digits();
+              }
+              else {
+                circle.setVisible(true);
+              }
+              break;
+            case 4:
+
+              introJs().onchange(function(targetElement) {
+
+                  var step = $(targetElement).attr('data-step');
+
+                  switch(parseInt(step))
+                  {
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                      var btn = $(targetElement).find("button");
+                      btn.click();
+                      break;
+
+                  }
+              }).setOption('showProgress', true).start();
+
+              break;
+          }
+
+        });
 
         $("#btn_resto").on('click', function() {
           var down = $("#btn_resto span").hasClass("glyphicon-collapse-down");
@@ -860,7 +709,7 @@
           }
 
         });
-        $(".resto_class").on('click', function() {
+        $("#btnFilterResto").on('click', function() {
           var results = document.getElementById('results');
           results.innerHTML = "";
           $('input[type=checkbox]').each(function () {
@@ -870,36 +719,11 @@
                 console.log($(this).val());
                 var restoClass = $(this).val();
                 displayRestoByClassification(restoClass);
+
               }
-          });
-          
-        });
-
-        $("#locationField input[type='radio']").click(function(){
-
-          var radioValue = $("input[name='displayTypes']:checked").val();
-          if (radioValue == "0") {
-            showDirection = true;
-          }
-          else {
-            showDirection = false;
-          }
-        });
-
-        $("#btnCircle").on('click', function() {
-
-          var elem = document.getElementById("btnCircle");
-
-          if (circle.getVisible()) {
-            elem.setAttribute("value", "Show Circle");
-            circle.setVisible(false);
-            document.getElementById('resto_count').innerHTML = 0;
-            document.getElementById('resto_total').innerHTML = 0;
-          }
-          else {
-            elem.setAttribute("value", "Hide Circle");
-            circle.setVisible(true);
-          }
+          }); 
+          console.log( $(".eventInfo:eq(0)"));
+          $(".col-md-1 .span2 button:eq(0)").click();
           
         });
 
@@ -914,8 +738,134 @@
 
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAYWixm2C-UBReCRjMSEoJ7szdH38sxbM&libraries=places,geometry,drawing&callback=initMap" async defer></script>
-    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-  </body>
-</html>
+
+
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="intro.js-2.3.0/introjs.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+  </head><body>
+    <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><span>By: Jovi Nel Parilla</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8" >
+            <div id="map"></div>
+          </div>
+          <div class="col-md-1" data-step="1" data-intro='Hello! These are the event buttons that we can use.' data-position='left'>
+            <div class="span2">
+              <p data-step="2" data-intro='Clicking this button will show direction. [source] is based on your current location, [destination] can be set either by clicking a restaurant on the map, or on the restaurant listed beside this button.' data-position='left'><button class="btn btn-success btn-block"><i class="material-icons">compare_arrows</i></button></p>
+              <p data-step="3" data-intro='Clicking this button will show restaurant information. To show restaurant information, just click on the restaurant on the map, or on the restaurant listed beside this button.' data-position='left'><button class="btn btn-success btn-block"><i class="material-icons">info_outline</i></button></p>
+              <p data-step="4" data-intro='We found many types of restaurants! But you only want buffet restaurants, you can achieve this by checking only the checkbox corresponding to buffet restaurant.' data-position='left'><button class="btn btn-success btn-block"><i class="material-icons">settings</i></button></p>
+              <p data-step="5" data-intro='You want to know how many restaurants are there near your place and how much they earned combined? Click this button and a circle object will show. Resize the circle and put it on your desired location.' data-position='left'><button class="btn btn-success btn-block"><i class="material-icons">donut_large</i></button></p>
+              <p><button class="btn btn-primary btn-block">Demo</button></p>
+              <!-- <p><button class="btn btn-success btn-block">Analy</button></p> -->
+            </div>
+          </div>
+          <div class="col-md-3">
+            
+            <div id="infoDiv">
+              <div class="eventInfo">
+                <span>From: My Location </span> <br/>
+                <span>To: (Please choose below) </span> <br/><br/>
+              </div>
+              <div class="eventInfo" style="display:none;">
+                <span>Please choose below.</span> <br/><br/>
+              </div>
+              <div class="eventInfo" style="display:none;">
+                <span>Please choose below.</span> <br/><br/>
+              </div>
+              <div class="eventInfo" style="display:none;">
+                <span>A circle has been dropped. You can change size and position if you want. Toggling it will show/hide the circle.</span> <br/><br/>
+              </div>
+              <div class="eventInfo" style="display:none;">
+                <span>Based from the gathered data from this map.</span> <br/><br/>
+              </div>
+
+              <table id="resultsTable">
+                <tbody id="results">
+                  
+                </tbody>
+              </table>
+
+              <div id="classificationCheckboxes" style="display:none;">
+                <input type="checkbox" class="resto_class" id="cb1" value="0" checked/><label for="cb1">Fast Food</label><br/>
+                <input type="checkbox" class="resto_class" id="cb2" value="1" checked/><label for="cb2">Barbeque</label><br/>
+                <input type="checkbox" class="resto_class" id="cb3" value="2" checked/><label for="cb3">Buffet</label><br/><br/>
+                <button class="btn btn-primary btn-block" id="btnFilterResto">Filter!</button>
+              </div>
+              
+              <table id="circleTable" style="display:none;">
+                <thead>
+                  <tr>
+                    <td>Restaurant found:</td>
+                    <td>Total earnings:</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="resto_count">0</td>
+                    <td><span>Php </span><span id="resto_total">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+<div style="display: none">
+  <div id="info-content">
+    <table>
+      <tr id="iw-url-row" class="iw_table_row">
+        <td id="iw-icon" class="iw_table_icon"></td>
+        <td id="iw-url"></td>
+      </tr>
+      <tr id="iw-address-row" class="iw_table_row">
+        <td class="iw_attribute_name">Patrons/day:</td>
+        <td id="iw-address"></td>
+      </tr>
+      <tr id="iw-phone-row" class="iw_table_row">
+        <td class="iw_attribute_name">Earnings/day:</td>
+        <td id="iw-phone"></td>
+      </tr>
+      <tr id="iw-rating-row" class="iw_table_row">
+        <td class="iw_attribute_name">Jobs of patrons:</td>
+        <td id="iw-rating"></td>
+      </tr>
+    </table>
+    <div>
+      <div id="columnchart_material"></div>
+    </div>
+  </div>
+</div>
+<div id="authorize-div" style="display: none">
+  <span>Authorize access to Google Sheets API</span>
+  <!--Button for the user to click to initiate auth sequence -->
+  <button id="authorize-button" onclick="handleAuthClick(event)">
+    Authorize
+  </button>
+</div>
+<!-- Map Related scripts -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAYWixm2C-UBReCRjMSEoJ7szdH38sxbM&libraries=places,geometry,drawing&callback=initMap" async defer></script>
+<script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<!-- End  -->
+</body></html>
